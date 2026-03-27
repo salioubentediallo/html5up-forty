@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: ci-html
+  IMAGE_NAME: webapp-ci-cd
   IMAGE_TAG: 1.0.1
   DOCKER_REGISTRY: ${{ secrets.DOCKERHUB_USERNAME }}
 
@@ -35,15 +35,15 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
+          docker build -t $(DOCKER_REGISTRY)/$(IMAGE_NAME):$(IMAGE_TAG) .
 
       - name: Verify image
         run: |
-          docker image ls | grep $IMAGE_NAME
+          docker image ls | grep $(IMAGE_NAME)
 
       - name: Push Docker image
         run: |
-          docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+          docker push $(DOCKER_REGISTRY)/$(IMAGE_NAME):$(IMAGE_TAG)
 
   # ===============================
   # JOB 2 - CD : DEPLOY
@@ -59,7 +59,7 @@ jobs:
 
       - name: Pull latest image
         run: |
-          docker pull $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+          docker pull $(DOCKER_REGISTRY)/$(IMAGE_NAME):$(IMAGE_TAG)
 
       - name: Stop existing container
         run: |
@@ -74,4 +74,4 @@ jobs:
           docker run -d \
             -p 80:80 \
             --name ci-app \
-            $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+            $(DOCKER_REGISTRY)/$(IMAGE_NAME):$(IMAGE_TAG)
