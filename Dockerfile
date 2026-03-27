@@ -1,6 +1,7 @@
 # Use official Nginx image as base (for serving static content)
 FROM nginx:alpine
 
+RUN apk update && apk upgrade
 # Copy our app files into the default Nginx document root (/usr/share/nginx/html)
 COPY index.html /usr/share/nginx/html/
 COPY elements.html /usr/share/nginx/html/
