@@ -69,7 +69,7 @@ jobs:
 
       - name: Pull latest image
         run: |
-          docker pull $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+          docker pull ${DOCKER_REGISTRY}/${IMAGE_NAME}:{$IMAGE_TAG}
 
       - name: Stop existing container
         run: |
